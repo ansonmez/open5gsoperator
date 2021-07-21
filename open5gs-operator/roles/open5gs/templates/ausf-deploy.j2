@@ -1,0 +1,32 @@
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: open5gs-ausf-deployment
+  labels:
+    epc-mode: ausf
+  namespace: '{{ meta.namespace }}'
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      epc-mode: ausf
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "true"
+      labels:
+        epc-mode: ausf
+    spec:    
+      containers:
+        - name: ausf
+          image: {{ open5gs_vars.open5gs.image.repository }}:{{ open5gs_vars.open5gs.image.tag }}
+          imagePullPolicy: {{ open5gs_vars.open5gs.image.pullpolicy }}
+          command: ["open5gs-ausfd", "-c", "/open5gs/config-map/ausf.yaml"]
+          volumeMounts:
+          - name: open5gs-ausf-config
+            mountPath: /open5gs/config-map/ausf.yaml
+            subPath: "ausf.yaml"
+      volumes:
+        - name: open5gs-ausf-config
+          configMap:
+            name: open5gs-ausf-config

@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: open5gs-udr
+  labels:
+    epc-mode: udr
+  namespace: '{{ meta.namespace }}'
+spec:
+  selector:
+    epc-mode: udr
+  ports:
+    - protocol: TCP
+      port: 80   
+      targetPort: 80

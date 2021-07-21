@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: open5gs-smf-config
+  labels:
+    epc-mode: smf
+  namespace: '{{ meta.namespace }}'
+data:
+  smf.yaml: |
+    logger:
+        file: /var/log/open5gs/smf.log
+    parameter:
+        no_ipv6: true
+    smf:
+        sbi:     
+        - addr: 0.0.0.0
+          advertise: open5gs-smf
+        pfcp:
+          dev: {{ open5gs_vars.smf.pfcp.interface }}
+        gtpc:
+          dev: {{ open5gs_vars.smf.gtpc.interface }}
+        gtpu:
+          dev: {{ open5gs_vars.smf.gtpu.interface }}    
+        subnet:
+         - addr: 10.45.0.1/16
+           dnn: {{ open5gs_vars.dnn }}
+         - addr: 10.45.1.1/16
+           dnn: {{ open5gs_vars.dnn2 }}
+        dns:
+          - 8.8.8.8
+          - 8.8.4.4
+        mtu: 1400
+    nrf:
+     sbi:
+      name: open5gs-nrf 
+    upf:
+      pfcp:
+        - name: upf-open5gs
+          addr: {{ open5gs_vars.upfmain.addr }}
+          dnn: {{ open5gs_vars.dnn }}
+        - name: upf-open5gs-mec
+          addr: {{ open5gs_vars.upfmec.addr }}
+          dnn: {{ open5gs_vars.dnn2 }}

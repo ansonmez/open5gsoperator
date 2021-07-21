@@ -1,0 +1,8 @@
+apiVersion: operators.coreos.com/v1alpha2
+kind: OperatorGroup
+metadata:
+  name: open5gs
+  namespace: open5gsoperator-system
+spec:
+  targetNamespaces:
+  - open5gsoperator-system

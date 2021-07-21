@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: open5gs-pcf
+  labels:
+    epc-mode: pcf
+  namespace: '{{ meta.namespace }}'
+spec:
+  selector:
+    epc-mode: pcf
+  ports:
+    - protocol: TCP
+      port: 80 
+      targetPort: 80  

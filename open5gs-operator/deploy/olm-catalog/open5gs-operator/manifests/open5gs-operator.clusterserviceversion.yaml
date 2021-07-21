@@ -1,0 +1,271 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: ClusterServiceVersion
+metadata:
+  annotations:
+    alm-examples: |-
+      [
+        {
+          "apiVersion": "open5gs.anil.redhat/v1alpha1",
+          "kind": "Open5gs",
+          "metadata": {
+            "name": "example-open5gs"
+          },
+          "spec": {
+            "open5gs_vars": {
+              "amf": {
+                "mcc": 208,
+                "mnc": 93,
+                "tac": 70
+              },
+              "dnn": "internet",
+              "dnn2": "arvr",
+              "k8s": {
+                "advertise": "192.168.50.200",
+                "interface": "eth0"
+              },
+              "netattchdefinition": "testuserplane",
+              "open5gs": {
+                "image": {
+                  "pullpolicy": "IfNotPresent",
+                  "repository": "registry.gitlab.com/infinitydon/registry/open5gs-aio",
+                  "tag": "v2.2.2"
+                }
+              },
+              "smf": {
+                "gtpc": {
+                  "interface": "eth0"
+                },
+                "gtpu": {
+                  "interface": "eth0"
+                },
+                "pfcp": {
+                  "interface": "eth0"
+                }
+              },
+              "upfmain": {
+                "addr": "192.168.50.200"
+              },
+              "upfmec": {
+                "addr": "192.168.50.201"
+              },
+              "webui": {
+                "image": {
+                  "pullpolicy": "IfNotPresent",
+                  "repository": "registry.gitlab.com/infinitydon/registry/open5gs-webui",
+                  "tag": "v2.2.2"
+                },
+                "ingress": {
+                  "enabled": false,
+                  "hosts": [
+                    {
+                      "name": "open5gs-epc.local",
+                      "paths": [
+                        "/"
+                      ],
+                      "tls": false
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      ]
+    capabilities: Basic Install
+    operatorframework.io/suggested-namespace: open5gsoperator-system
+  name: open5gs-operator.v1.0.0
+  namespace: open5gsoperator-system
+spec:
+  apiservicedefinitions: {}
+  customresourcedefinitions:
+    owned:
+    - kind: Open5gs
+      name: open5gs.open5gs.anil.redhat
+      version: v1alpha1
+  description: open5gs 5G Core Network
+  displayName: open5gs
+  icon:
+  - base64data: ""
+    mediatype: ""
+  install:
+    spec:
+      deployments:
+      - name: open5gs-operator
+        spec:
+          replicas: 1
+          selector:
+            matchLabels:
+              name: open5gs-operator
+          strategy: {}
+          template:
+            metadata:
+              labels:
+                name: open5gs-operator
+            spec:
+              containers:
+              - env:
+                - name: WATCH_NAMESPACE
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.annotations['olm.targetNamespaces']
+                - name: POD_NAME
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.name
+                - name: OPERATOR_NAME
+                  value: open5gs-operator
+                - name: ANSIBLE_GATHERING
+                  value: explicit
+                image: quay.io/asonmez/open5gsoperator:latest
+                imagePullPolicy: Always
+                livenessProbe:
+                  httpGet:
+                    path: /healthz
+                    port: 6789
+                  initialDelaySeconds: 5
+                  periodSeconds: 3
+                name: open5gs-operator
+                resources: {}
+                volumeMounts:
+                - mountPath: /tmp/ansible-operator/runner
+                  name: runner
+              serviceAccountName: open5gs-operator
+              volumes:
+              - emptyDir: {}
+                name: runner
+      - name: open5gs-operator
+        spec:
+          replicas: 1
+          selector:
+            matchLabels:
+              name: open5gs-operator
+          strategy: {}
+          template:
+            metadata:
+              labels:
+                name: open5gs-operator
+            spec:
+              containers:
+              - env:
+                - name: WATCH_NAMESPACE
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.annotations['olm.targetNamespaces']
+                - name: POD_NAME
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.name
+                - name: OPERATOR_NAME
+                  value: open5gs-operator
+                - name: ANSIBLE_GATHERING
+                  value: explicit
+                image: quay.io/asonmez/open5gsoperator:latest
+                imagePullPolicy: Always
+                name: open5gs-operator
+                resources: {}
+                volumeMounts:
+                - mountPath: /tmp/ansible-operator/runner
+                  name: runner
+              serviceAccountName: open5gs-operator
+              volumes:
+              - emptyDir: {}
+                name: runner
+      permissions:
+      - rules:
+        - apiGroups:
+          - ""
+          resources:
+          - pods
+          - services
+          - services/finalizers
+          - endpoints
+          - persistentvolumeclaims
+          - events
+          - configmaps
+          - secrets
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - apps
+          resources:
+          - deployments
+          - daemonsets
+          - replicasets
+          - statefulsets
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - monitoring.coreos.com
+          resources:
+          - servicemonitors
+          verbs:
+          - get
+          - create
+        - apiGroups:
+          - apps
+          resourceNames:
+          - open5gs-operator
+          resources:
+          - deployments/finalizers
+          verbs:
+          - update
+        - apiGroups:
+          - ""
+          resources:
+          - pods
+          verbs:
+          - get
+        - apiGroups:
+          - apps
+          resources:
+          - replicasets
+          - deployments
+          verbs:
+          - get
+        - apiGroups:
+          - open5gs.anil.redhat
+          resources:
+          - '*'
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        serviceAccountName: open5gs-operator
+    strategy: deployment
+  installModes:
+  - supported: true
+    type: OwnNamespace
+  - supported: true
+    type: SingleNamespace
+  - supported: false
+    type: MultiNamespace
+  - supported: true
+    type: AllNamespaces
+  keywords:
+  - 5G
+  links:
+  - name: Open5gs Operator
+    url: https://open5gs-operator.domain
+  maintainers:
+  - email: anil.sonmez@gmail.com
+    name: Anil Sonmez
+  maturity: alpha
+  provider:
+    name: Anil Sonmez
+  version: 1.0.0

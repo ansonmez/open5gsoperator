@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: amf-open5gs-sctp
+  labels:
+    epc-mode: amf
+  namespace: '{{ meta.namespace }}'
+spec:
+  type: NodePort
+  selector:
+    epc-mode: amf
+  ports:
+    - protocol: SCTP
+      port: 38412
+      targetPort: 38412
+      nodePort: 30412

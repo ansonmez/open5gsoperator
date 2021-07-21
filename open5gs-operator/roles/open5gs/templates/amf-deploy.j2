@@ -1,0 +1,32 @@
+apiVersion: apps/v1 
+kind: Deployment
+metadata:
+  name: open5gs-amf-deployment
+  labels:
+    epc-mode: amf
+  namespace: '{{ meta.namespace }}'
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      epc-mode: amf
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "true"
+      labels:
+        epc-mode: amf
+    spec:    
+      containers:
+        - name: amf
+          image: {{ open5gs_vars.open5gs.image.repository }}:{{ open5gs_vars.open5gs.image.tag }}
+          imagePullPolicy: {{ open5gs_vars.open5gs.image.pullpolicy }}
+          command: ["open5gs-amfd", "-c", "/open5gs/config-map/amf.yaml"]
+          volumeMounts:
+          - name: open5gs-amf-config
+            mountPath: /open5gs/config-map/amf.yaml
+            subPath: "amf.yaml"
+      volumes:
+        - name: open5gs-amf-config
+          configMap:
+            name: open5gs-amf-config

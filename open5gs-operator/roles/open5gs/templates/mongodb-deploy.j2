@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: open5gs-mongodb
+  namespace: '{{ meta.namespace }}'
+spec:
+  selector:
+    matchLabels:
+      app: open5gs-mongodb
+  template:
+    metadata:
+      labels:
+        app: open5gs-mongodb
+    spec:
+      containers:
+      - image: free5gmano/nextepc-mongodb
+        name: open5gs-mongodb
+        ports:
+        - containerPort: 27017
+          name: mongodb

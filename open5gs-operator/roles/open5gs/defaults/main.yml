@@ -1,0 +1,46 @@
+---
+# defaults file for open5gs
+open5gs_vars:
+  open5gs:
+    image:
+      repository: registry.gitlab.com/infinitydon/registry/open5gs-aio
+      pullPolicy: IfNotPresent
+      tag: "v2.2.2"
+
+  webui:
+    image:
+      repository: registry.gitlab.com/infinitydon/registry/open5gs-webui
+      pullPolicy: IfNotPresent
+      tag: "v2.2.2"
+    ingress:
+      enabled: false
+      hosts:
+        - name: open5gs-epc.local
+          paths: ["/"]
+          tls: false
+
+  dnn: internet
+  dnn2: arvr
+
+  smf:
+    pfcp:
+      interface: eth0
+    gtpc:
+      interface: eth0
+    gtpu:
+      interface: eth0
+
+  upfmain:
+    addr:  192.168.50.200
+
+  upfmec:
+    addr: 192.168.50.201
+
+  amf:
+    mcc: 208
+    mnc: 93
+    tac: 7
+
+  k8s:
+   interface: eth0
+   advertise: 192.168.50.200

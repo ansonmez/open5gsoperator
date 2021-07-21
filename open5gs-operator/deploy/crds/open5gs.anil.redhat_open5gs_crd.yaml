@@ -1,0 +1,22 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: open5gs.open5gs.anil.redhat
+spec:
+  group: open5gs.anil.redhat
+  names:
+    kind: Open5gs
+    listKind: Open5gsList
+    plural: open5gs
+    singular: open5gs
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        type: object
+        x-kubernetes-preserve-unknown-fields: true
+    served: true
+    storage: true
+    subresources:
+      status: {}

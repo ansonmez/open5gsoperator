@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: open5gs-nrf-config
+  labels:
+    epc-mode: nrf
+  namespace: '{{ meta.namespace }}'
+data:
+  nrf.yaml: |
+    logger:
+        file: /var/log/open5gs/nrf.log
+    nrf:
+        sbi:
+          addr: 0.0.0.0

@@ -1,0 +1,590 @@
+---
+# tasks file for open5gs
+#
+- name: Installing Open5gs
+  debug:
+    msg: INSTALLING OPEN5GS
+
+# Default setup and platform querying
+#- name: Pre-setup
+#  include_tasks: pre.yml
+#
+#
+- debug:
+    msg: "name: {{ meta.name }}, {{ meta.namespace }}"
+
+- name: Installing AMF instance
+  debug:
+    msg: INSTALLING AMF
+
+
+
+
+- name: Lookup AMF configmap template
+  debug:
+    msg: "{{ lookup('template', './amf-configmap.j2') | from_yaml }}"
+
+- name: Set default AMF configmap
+  set_fact:
+    amf_configmap_manifest:  "{{ lookup('template', './amf-configmap.j2') | from_yaml }}"
+  when: amf_configmap_manifest is not defined
+
+- name: Create AMF configmap
+  k8s:
+    state: present
+    definition:
+      '{{ amf_configmap_manifest }}'
+
+
+
+
+- name: Lookup AMF deployment template
+  debug:
+    msg: "{{ lookup('template', './amf-deploy.j2') | from_yaml }}"
+
+- name: Set default AMF deployment
+  set_fact:
+    amf_deploy_manifest:  "{{ lookup('template', './amf-deploy.j2') | from_yaml }}"
+  when: amf_deploy_manifest is not defined
+
+- name: Create AMF deployment
+  k8s:
+    state: present
+    definition:
+      '{{ amf_deploy_manifest }}'
+
+
+
+
+- name: Lookup AMF service template
+  debug:
+    msg: "{{ lookup('template', './amf-service.j2') | from_yaml }}"
+
+- name: Set default AMF service
+  set_fact:
+    amf_service_manifest:  "{{ lookup('template', './amf-service.j2') | from_yaml }}"
+  when: amf_service_manifest is not defined
+
+- name: Create AMF service
+  k8s:
+    state: present
+    definition:
+      '{{ amf_service_manifest }}'
+
+
+
+- name: Lookup AMF nodeport template
+  debug:
+    msg: "{{ lookup('template', './amf-nodeport.j2') | from_yaml }}"
+
+- name: Set default AMF nodeport
+  set_fact:
+    amf_nodeport_manifest:  "{{ lookup('template', './amf-nodeport.j2') | from_yaml }}"
+  when: amf_nodeport_manifest is not defined
+
+- name: Create AMF nodeport
+  k8s:
+    state: present
+    definition:
+      '{{ amf_nodeport_manifest }}'
+
+
+
+
+- name: Lookup AUSF configmap template
+  debug:
+    msg: "{{ lookup('template', './ausf-configmap.j2') | from_yaml }}"
+
+- name: Set default AUSF configmap
+  set_fact:
+    ausf_configmap_manifest:  "{{ lookup('template', './ausf-configmap.j2') | from_yaml }}"
+  when: ausf_configmap_manifest is not defined
+
+- name: Create AUSF configmap
+  k8s:
+    state: present
+    definition:
+      '{{ ausf_configmap_manifest }}'
+ 
+
+
+
+- name: Lookup AUSF service template
+  debug:
+    msg: "{{ lookup('template', './ausf-service.j2') | from_yaml }}"
+
+- name: Set default AUSF service
+  set_fact:
+    ausf_service_manifest:  "{{ lookup('template', './ausf-service.j2') | from_yaml }}"
+  when: ausf_service_manifest is not defined
+
+- name: Create AUSF service
+  k8s:
+    state: present
+    definition:
+      '{{ ausf_service_manifest }}'
+
+
+
+
+- name: Lookup AUSF deloy template
+  debug:
+    msg: "{{ lookup('template', './ausf-deploy.j2') | from_yaml }}"
+
+- name: Set default AUSF deploy
+  set_fact:
+    ausf_deploy_manifest:  "{{ lookup('template', './ausf-deploy.j2') | from_yaml }}"
+  when: ausf_deploy_manifest is not defined
+
+- name: Create AUSF deploy
+  k8s:
+    state: present
+    definition:
+      '{{ ausf_deploy_manifest }}'
+
+
+
+- name: Lookup nrf configmap template
+  debug:
+    msg: "{{ lookup('template', './nrf-configmap.j2') | from_yaml }}"
+
+- name: Set default nrf configmap
+  set_fact:
+    nrf_configmap_manifest:  "{{ lookup('template', './nrf-configmap.j2') | from_yaml }}"
+  when: nrf_configmap_manifest is not defined
+
+- name: Create nrf configmap
+  k8s:
+    state: present
+    definition:
+      '{{ nrf_configmap_manifest }}'
+
+
+
+
+- name: Lookup nrf service template
+  debug:
+    msg: "{{ lookup('template', './nrf-service.j2') | from_yaml }}"
+
+- name: Set default nrf service
+  set_fact:
+    nrf_service_manifest:  "{{ lookup('template', './nrf-service.j2') | from_yaml }}"
+  when: nrf_service_manifest is not defined
+
+- name: Create nrf service
+  k8s:
+    state: present
+    definition:
+      '{{ nrf_service_manifest }}'
+
+
+
+
+- name: Lookup nrf deloy template
+  debug:
+    msg: "{{ lookup('template', './nrf-deploy.j2') | from_yaml }}"
+
+- name: Set default nrf deploy
+  set_fact:
+    nrf_deploy_manifest:  "{{ lookup('template', './nrf-deploy.j2') | from_yaml }}"
+  when: nrf_deploy_manifest is not defined
+
+- name: Create nrf deploy
+  k8s:
+    state: present
+    definition:
+      '{{ nrf_deploy_manifest }}'
+
+
+
+
+- name: Lookup nssf configmap template
+  debug:
+    msg: "{{ lookup('template', './nssf-configmap.j2') | from_yaml }}"
+
+- name: Set default nssf configmap
+  set_fact:
+    nssf_configmap_manifest:  "{{ lookup('template', './nssf-configmap.j2') | from_yaml }}"
+  when: nssf_configmap_manifest is not defined
+
+- name: Create nssf configmap
+  k8s:
+    state: present
+    definition:
+      '{{ nssf_configmap_manifest }}'
+
+
+
+
+- name: Lookup nssf service template
+  debug:
+    msg: "{{ lookup('template', './nssf-service.j2') | from_yaml }}"
+
+- name: Set default nssf service
+  set_fact:
+    nssf_service_manifest:  "{{ lookup('template', './nssf-service.j2') | from_yaml }}"
+  when: nssf_service_manifest is not defined
+
+- name: Create nssf service
+  k8s:
+    state: present
+    definition:
+      '{{ nssf_service_manifest }}'
+
+
+
+
+- name: Lookup nssf deloy template
+  debug:
+    msg: "{{ lookup('template', './nssf-deploy.j2') | from_yaml }}"
+
+- name: Set default nssf deploy
+  set_fact:
+    nssf_deploy_manifest:  "{{ lookup('template', './nssf-deploy.j2') | from_yaml }}"
+  when: nssf_deploy_manifest is not defined
+
+- name: Create nssf deploy
+  k8s:
+    state: present
+    definition:
+      '{{ nssf_deploy_manifest }}'
+
+
+
+- name: Lookup pcf configmap template
+  debug:
+    msg: "{{ lookup('template', './pcf-configmap.j2') | from_yaml }}"
+
+- name: Set default pcf configmap
+  set_fact:
+    pcf_configmap_manifest:  "{{ lookup('template', './pcf-configmap.j2') | from_yaml }}"
+  when: pcf_configmap_manifest is not defined
+
+- name: Create pcf configmap
+  k8s:
+    state: present
+    definition:
+      '{{ pcf_configmap_manifest }}'
+
+
+
+
+- name: Lookup pcf service template
+  debug:
+    msg: "{{ lookup('template', './pcf-service.j2') | from_yaml }}"
+
+- name: Set default pcf service
+  set_fact:
+    pcf_service_manifest:  "{{ lookup('template', './pcf-service.j2') | from_yaml }}"
+  when: pcf_service_manifest is not defined
+
+- name: Create pcf service
+  k8s:
+    state: present
+    definition:
+      '{{ pcf_service_manifest }}'
+
+
+
+
+- name: Lookup pcf deloy template
+  debug:
+    msg: "{{ lookup('template', './pcf-deploy.j2') | from_yaml }}"
+
+- name: Set default pcf deploy
+  set_fact:
+    pcf_deploy_manifest:  "{{ lookup('template', './pcf-deploy.j2') | from_yaml }}"
+  when: pcf_deploy_manifest is not defined
+
+- name: Create pcf deploy
+  k8s:
+    state: present
+    definition:
+      '{{ pcf_deploy_manifest }}'
+
+
+
+
+- name: Lookup smf configmap template
+  debug:
+    msg: "{{ lookup('template', './smf-configmap.j2') | from_yaml }}"
+
+- name: Set default smf configmap
+  set_fact:
+    smf_configmap_manifest:  "{{ lookup('template', './smf-configmap.j2') | from_yaml }}"
+  when: smf_configmap_manifest is not defined
+
+- name: Create smf configmap
+  k8s:
+    state: present
+    definition:
+      '{{ smf_configmap_manifest }}'
+
+
+
+
+- name: Lookup smf service template
+  debug:
+    msg: "{{ lookup('template', './smf-service.j2') | from_yaml }}"
+
+- name: Set default smf service
+  set_fact:
+    smf_service_manifest:  "{{ lookup('template', './smf-service.j2') | from_yaml }}"
+  when: smf_service_manifest is not defined
+
+- name: Create smf service
+  k8s:
+    state: present
+    definition:
+      '{{ smf_service_manifest }}'
+
+
+
+
+- name: Lookup smf deloy template
+  debug:
+    msg: "{{ lookup('template', './smf-deploy.j2') | from_yaml }}"
+
+- name: Set default smf deploy
+  set_fact:
+    smf_deploy_manifest:  "{{ lookup('template', './smf-deploy.j2') | from_yaml }}"
+  when: smf_deploy_manifest is not defined
+
+- name: Create smf deploy
+  k8s:
+    state: present
+    definition:
+      '{{ smf_deploy_manifest }}'
+      
+
+
+
+
+
+- name: Lookup udm configmap template
+  debug:
+    msg: "{{ lookup('template', './udm-configmap.j2') | from_yaml }}"
+
+- name: Set default udm configmap
+  set_fact:
+    udm_configmap_manifest:  "{{ lookup('template', './udm-configmap.j2') | from_yaml }}"
+  when: udm_configmap_manifest is not defined
+
+- name: Create udm configmap
+  k8s:
+    state: present
+    definition:
+      '{{ udm_configmap_manifest }}'
+
+
+
+
+- name: Lookup udm service template
+  debug:
+    msg: "{{ lookup('template', './udm-service.j2') | from_yaml }}"
+
+- name: Set default udm service
+  set_fact:
+    udm_service_manifest:  "{{ lookup('template', './udm-service.j2') | from_yaml }}"
+  when: udm_service_manifest is not defined
+
+- name: Create udm service
+  k8s:
+    state: present
+    definition:
+      '{{ udm_service_manifest }}'
+
+
+
+
+- name: Lookup udm deloy template
+  debug:
+    msg: "{{ lookup('template', './udm-deploy.j2') | from_yaml }}"
+
+- name: Set default udm deploy
+  set_fact:
+    udm_deploy_manifest:  "{{ lookup('template', './udm-deploy.j2') | from_yaml }}"
+  when: udm_deploy_manifest is not defined
+
+- name: Create udm deploy
+  k8s:
+    state: present
+    definition:
+      '{{ udm_deploy_manifest }}'
+
+
+
+
+
+- name: Lookup udr configmap template
+  debug:
+    msg: "{{ lookup('template', './udr-configmap.j2') | from_yaml }}"
+
+- name: Set default udr configmap
+  set_fact:
+    udr_configmap_manifest:  "{{ lookup('template', './udr-configmap.j2') | from_yaml }}"
+  when: udr_configmap_manifest is not defined
+
+- name: Create udr configmap
+  k8s:
+    state: present
+    definition:
+      '{{ udr_configmap_manifest }}'
+
+
+
+
+- name: Lookup udr service template
+  debug:
+    msg: "{{ lookup('template', './udr-service.j2') | from_yaml }}"
+
+- name: Set default udr service
+  set_fact:
+    udr_service_manifest:  "{{ lookup('template', './udr-service.j2') | from_yaml }}"
+  when: udr_service_manifest is not defined
+
+- name: Create udr service
+  k8s:
+    state: present
+    definition:
+      '{{ udr_service_manifest }}'
+
+
+
+
+- name: Lookup udr deloy template
+  debug:
+    msg: "{{ lookup('template', './udr-deploy.j2') | from_yaml }}"
+
+- name: Set default udr deploy
+  set_fact:
+    udr_deploy_manifest:  "{{ lookup('template', './udr-deploy.j2') | from_yaml }}"
+  when: udr_deploy_manifest is not defined
+
+- name: Create udr deploy
+  k8s:
+    state: present
+    definition:
+      '{{ udr_deploy_manifest }}'
+
+
+
+
+- name: Lookup upf configmap template
+  debug:
+    msg: "{{ lookup('template', './upf-configmap.j2') | from_yaml }}"
+
+- name: Set default upf configmap
+  set_fact:
+    upf_configmap_manifest:  "{{ lookup('template', './upf-configmap.j2') | from_yaml }}"
+  when: upf_configmap_manifest is not defined
+
+- name: Create upf configmap
+  k8s:
+    state: present
+    definition:
+      '{{ upf_configmap_manifest }}'
+
+
+
+
+- name: Lookup upf service template
+  debug:
+    msg: "{{ lookup('template', './upf-service.j2') | from_yaml }}"
+
+- name: Set default upf service
+  set_fact:
+    upf_service_manifest:  "{{ lookup('template', './upf-service.j2') | from_yaml }}"
+  when: upf_service_manifest is not defined
+
+- name: Create upf service
+  k8s:
+    state: present
+    definition:
+      '{{ upf_service_manifest }}'
+
+
+
+
+- name: Lookup upf deloy template
+  debug:
+    msg: "{{ lookup('template', './upf-deploy.j2') | from_yaml }}"
+
+- name: Set default upf deploy
+  set_fact:
+    upf_deploy_manifest:  "{{ lookup('template', './upf-deploy.j2') | from_yaml }}"
+  when: upf_deploy_manifest is not defined
+
+- name: Create upf deploy
+  k8s:
+    state: present
+    definition:
+      '{{ upf_deploy_manifest }}'
+
+
+
+- name: Lookup mongodb service template
+  debug:
+    msg: "{{ lookup('template', './mongodb-service.j2') | from_yaml }}"
+
+- name: Set default mongodb service
+  set_fact:
+    mongodb_service_manifest:  "{{ lookup('template', './mongodb-service.j2') | from_yaml }}"
+  when: mongodb_service_manifest is not defined
+
+- name: Create mongodb service
+  k8s:
+    state: present
+    definition:
+      '{{ mongodb_service_manifest }}'
+
+
+
+
+- name: Lookup mongodb deloy template
+  debug:
+    msg: "{{ lookup('template', './mongodb-deploy.j2') | from_yaml }}"
+
+- name: Set default mongodb deploy
+  set_fact:
+    mongodb_deploy_manifest:  "{{ lookup('template', './mongodb-deploy.j2') | from_yaml }}"
+  when: mongodb_deploy_manifest is not defined
+
+- name: Create mongodb deploy
+  k8s:
+    state: present
+    definition:
+      '{{ mongodb_deploy_manifest }}'
+
+- name: Lookup web service template
+  debug:
+    msg: "{{ lookup('template', './web-service.j2') | from_yaml }}"
+
+- name: Set default web service
+  set_fact:
+    web_service_manifest:  "{{ lookup('template', './web-service.j2') | from_yaml }}"
+  when: web_service_manifest is not defined
+
+- name: Create web service
+  k8s:
+    state: present
+    definition:
+      '{{ web_service_manifest }}'
+
+
+
+
+- name: Lookup web deloy template
+  debug:
+    msg: "{{ lookup('template', './web-deploy.j2') | from_yaml }}"
+
+- name: Set default web deploy
+  set_fact:
+    web_deploy_manifest:  "{{ lookup('template', './web-deploy.j2') | from_yaml }}"
+  when: web_deploy_manifest is not defined
+
+- name: Create web deploy
+  k8s:
+    state: present
+    definition:
+      '{{ web_deploy_manifest }}'

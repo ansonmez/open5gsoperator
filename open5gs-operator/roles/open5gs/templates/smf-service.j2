@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: open5gs-smf
+  labels:
+    epc-mode: smf
+  namespace: '{{ meta.namespace }}'
+spec:
+  selector:
+    epc-mode: smf
+  ports:
+    - protocol: TCP
+      port: 80 
+      targetPort: 80 

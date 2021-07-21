@@ -1,0 +1,30 @@
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: open5gs-pcf-deployment
+  labels:
+    epc-mode: pcf
+  namespace: '{{ meta.namespace }}'
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      epc-mode: pcf
+  template:
+    metadata:
+      labels:
+        epc-mode: pcf
+    spec:    
+      containers:
+        - name: pcf
+          image: {{ open5gs_vars.open5gs.image.repository }}:{{ open5gs_vars.open5gs.image.tag }}
+          imagePullPolicy: {{ open5gs_vars.open5gs.image.pullpolicy }}
+          command: ["open5gs-pcfd", "-c", "/open5gs/config-map/pcf.yaml"]
+          volumeMounts:
+          - name: open5gs-pcf-config
+            mountPath: /open5gs/config-map/pcf.yaml
+            subPath: "pcf.yaml"          
+      volumes:
+        - name: open5gs-pcf-config
+          configMap:
+            name: open5gs-pcf-config         

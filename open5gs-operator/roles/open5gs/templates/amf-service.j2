@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: open5gs-amf
+  labels:
+    epc-mode: amf
+  namespace: '{{ meta.namespace }}'
+spec:
+  selector:
+    epc-mode: amf
+  ports:
+    - protocol: TCP
+      port: 80   
+      targetPort: 80      

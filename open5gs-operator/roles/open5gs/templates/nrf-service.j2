@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: open5gs-nrf
+  labels:
+    epc-mode: nrf
+  namespace: '{{ meta.namespace }}'
+spec:
+  selector:
+    epc-mode: nrf
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80

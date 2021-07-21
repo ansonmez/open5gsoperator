@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: upf-open5gs
+  labels:
+    epc-mode: upf
+  namespace: '{{ meta.namespace }}'
+spec:
+  selector:
+    epc-mode: upf
+  ports:
+    - protocol: UDP
+      port: 8805
+      targetPort: 8805 
