@@ -1,11 +1,13 @@
 Openshift 4.6 
+```
+
 # oc new-project open5gsoperator-system
 
 Enable SCTP  load-sctp-module.yaml
 # oc apply -f load-sctp-module.yaml 
 
 Add network attachment definition 
-#oc apply -f  network-attachment-definitions.yaml
+# oc apply -f  network-attachment-definitions.yaml 
 
 enable SCC for open5gs #  admiting i am lazy i have not spend time for making it scc free
 # oc adm policy add-scc-to-user anyuid -z default
@@ -29,3 +31,5 @@ spec:
     registryPoll:
       interval: 60m
 EOF
+```
+
