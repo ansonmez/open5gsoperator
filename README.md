@@ -16,7 +16,7 @@ enable SCC for open5gs #  admiting i am lazy i have not spend time for making it
 # oc adm policy add-scc-to-user privileged -z  default
 
 add catalogsource
-cat <<EOF | oc apply -f -
+# cat <<EOF | oc apply -f -
 apiVersion: operators.coreos.com/v1alpha1
 kind: CatalogSource
 metadata:
