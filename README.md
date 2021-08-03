@@ -31,5 +31,58 @@ spec:
     registryPoll:
       interval: 60m
 EOF
+
+
+check operatorhub in OCP and search for open5gs
+while creating open5gs instance change networkattachmentdefinition in custom resource 
+netattachdefinition should match with network-attachment-definitions.yaml
+below will be populated automated in yaml view
+
+
+apiVersion: open5gs.anil.redhat/v1alpha1
+kind: Open5gs
+metadata:
+  name: anil-open5gs
+  namespace: open5gsoperator-system
+spec:
+  open5gs_vars:
+    amf:
+      mcc: 208
+      mnc: 93
+      tac: 70
+    dnn: internet
+    dnn2: arvr
+    k8s:
+      advertise: 192.168.50.200
+      interface: eth0
+    netattchdefinition: testuserplane
+    open5gs:
+      image:
+        pullpolicy: IfNotPresent
+        repository: registry.gitlab.com/infinitydon/registry/open5gs-aio
+        tag: v2.2.2
+    smf:
+      gtpc:
+        interface: eth0
+      gtpu:
+        interface: eth0
+      pfcp:
+        interface: eth0
+    upfmain:
+      addr: 192.168.50.200
+    upfmec:
+      addr: 192.168.50.201
+    webui:
+      image:
+        pullpolicy: IfNotPresent
+        repository: registry.gitlab.com/infinitydon/registry/open5gs-webui
+        tag: v2.2.2
+      ingress:
+        enabled: false
+        hosts:
+          - name: open5gs-epc.local
+            paths:
+              - /
+            tls: false
 ```
 
