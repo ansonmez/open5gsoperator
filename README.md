@@ -1,4 +1,4 @@
-Openshift 4.6 
+Tested on Openshift 4.6 
 ```
 
 # oc new-project open5gsoperator-system
@@ -6,7 +6,7 @@ Openshift 4.6
 Enable SCTP  load-sctp-module.yaml
 # oc apply -f load-sctp-module.yaml 
 
-Add network attachment definition 
+Add network attachment definition, while adding secondary interface check Openshift workers and identify interface name, and adjust with definition in network-attachment-definitions.yaml , ip address attached to secondary interface has to be reachable/routeable from primary interfaces, smf will be communicating with upf (secondary interface will be attached to upf cnf)
 # oc apply -f  network-attachment-definitions.yaml 
 
 enable SCC for open5gs #  admiting i am lazy i have not spend time for making it scc free
@@ -36,7 +36,7 @@ EOF
 check operatorhub in OCP and search for open5gs
 while creating open5gs instance change networkattachmentdefinition in custom resource 
 netattachdefinition should match with network-attachment-definitions.yaml
-below will be populated automated in yaml view
+The custom resource below will be populated automated in yaml view in Openshift 
 
 
 apiVersion: open5gs.anil.redhat/v1alpha1
